@@ -6,8 +6,8 @@ void setup () {
 }
 void draw () {
   background (40);
-  m.dibujar();
+  m.iniciar();
 }
-void keyPressed() {
-  //(keyCode);
+void keyPressed() { 
+
 }

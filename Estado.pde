@@ -1,12 +1,12 @@
 class Estado {    //estados del juego
   int cuenta;
   int cuentamx;
-  Estado (int cuenta, int cuentamx) {
+  Estado (int cuenta) {
     this.cuenta = cuenta;
-    this.cuentamx = cuentamx;
+    cuentamx = 4;
   }
   void sumarEstado() {
-    if (this.cuenta < this.cuentamx) {
+    if (cuenta < this.cuentamx) {
       this.cuenta++;
     }
   }
