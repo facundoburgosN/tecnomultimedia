@@ -28,38 +28,55 @@ class Powerup { //extends proyectil
 }
 class Proyectil { 
   float x, y, t;
-  boolean disparado, col;
-  Proyectil (float x,float y, boolean col) {
+  boolean col, fuera;
+  PShape p; //proyectil
+  Proyectil (float x, float y, boolean col, PShape p) {
     this.x = x;
     this.y = y;
     this.col = col;
+    this.p = p;
   }
   void dibujarProyectil() {
-    rect(x,y,20,5);
+    rect(x, y, 20, 5);
   }
-    void mover() {
-    if (disparado) {
+  void mover() {
+    if (!fuera) {
       x -=2; // se mueve la bala
-    } else {
-      disparado = false;
     }
   }
-  void disparaProyectil() {
-    disparado = true;
-  }
-  boolean fuera() {
-    return y<0;
+
+  void retornar() {
+    if (x<=0) {
+      x =width-10;
+    }
   }
 }
-class Bala { //extends proyectil
+class Bala extends Proyectil { 
+  float x, y;
+  boolean col;
+  PShape b;
   //PImage textura de la bala
   //int para la "hitbox" o cuadro de colisión
+  Bala(float x, float y, boolean col, PShape b) {
+    super(x, y, col, b);
+    shapeMode(CENTER);
+    b = loadShape("bullet.svg");
+    this.b = b;
+    this.x = x;
+    this.y = y;
+    b.scale(0.1);
+  }
+  void dibujar() {
+    shape (b, x-=10, y);
+    super.mover();
+    super.retornar();
+    if (x<=0) {
+      x =width-10;
+    }
+  }
 }
 class Gafas {//extends Powerup
   //al recoger este powerup que frene las balas
-}
-class Glifo { //extends Powerup
-  //glifo verde icónico que al recogerlo esquive las balas
 }
 class Llave { //extends Powerup
   //Gana el juego
