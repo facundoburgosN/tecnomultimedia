@@ -13,18 +13,17 @@ class Neo {
       y += 2;
     }
   }
-  void powerup () { 
+}
+class Powerup {  
+  float r; //rotan en vuelo
+  Powerup(float r) {
+    this.r = r;
+  }
+  void powerup () { //que sea una barra que se llena, al presionar "x" tecla se activa
     //estado de invulnerabilidad, donde cada instancia de Balas
     //no afecta al pj
     //if powerup true que "desactive" temporalmente la colisión
   }
-}
-class Powerup { //extends proyectil
-  //PImage del powerup "unas gafas de sol"
-  float r; //rotan en vuelo
-
-  //Powerup(x){    constructor
-  //  super (x);}
 }
 class Proyectil { 
   float x, y, t;
@@ -41,45 +40,32 @@ class Proyectil {
   }
   void mover() {
     if (!fuera) {
-      x -=2; // se mueve la bala
+      x -=2; // se mueve el proyectil
     }
   }
-
   void retornar() {
-    if (x<=0) {
-      x =width-10;
+    if (x<=-10) {
+      x =width*2;
     }
   }
 }
 class Bala extends Proyectil { 
-  float x, y;
-  boolean col;
   PShape b;
   //PImage textura de la bala
-  //int para la "hitbox" o cuadro de colisión
-  Bala(float x, float y, boolean col, PShape b) {
-    super(x, y, col, b);
-    shapeMode(CENTER);
+  //circle para la "hitbox" o cuadro de colisión
+  Bala(float x, float y, boolean col, PShape b) {//puedo agregar parámetros extra
+    super(x, y, col, b);                         //cuidado con lo que heredás
     b = loadShape("bullet.svg");
     this.b = b;
-    this.x = x;
-    this.y = y;
     b.scale(0.1);
+    b.setFill(255);
+    b.rotate(4.71);
   }
   void dibujar() {
-    shape (b, x-=10, y);
-    super.mover();
-    super.retornar();
-    if (x<=0) {
-      x =width-10;
-    }
+    shape (b, x, y);
+    mover();
+    retornar();
   }
-}
-class Gafas {//extends Powerup
-  //al recoger este powerup que frene las balas
-}
-class Llave { //extends Powerup
-  //Gana el juego
 }
 class Texto {
   PFont fuente;

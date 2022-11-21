@@ -8,6 +8,5 @@ void draw () {
   background (40);
   m.iniciar();
 }
-void keyPressed() { 
-
+void keyPressed() {
 }
