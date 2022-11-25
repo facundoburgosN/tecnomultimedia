@@ -1,16 +1,32 @@
 class Neo {
   //int para la "hitbox" o cuadro de colisión
-  float x, y;
+  PShape neo;
+  int x, y, tam;
   int temp; //temporizador de las gafas
   boolean powerup; //cuando el pj recoje un powerup
   //PImage textura del personaje
-  //falta constructor
-  void mover (int tecla) {
+  Neo (int x2, int y2) {
+    neo = loadShape("neo.svg");
+    this.x = x2;
+    this.y = y2;
+    tam = 300;
+  }
+  void dibujar () {
+    rect (x, y, tam/4, tam/4);
+    shape(neo, x, y, tam, tam);
+  }
+  void mover(int tecla) {
+    if (tecla==RIGHT) {
+      x+=10;
+    }
+    if (tecla==LEFT) {
+      x-=10;
+    }
     if (tecla==UP) {
-      y-=2;
+      y-=10;
     }
     if (tecla==DOWN) {
-      y += 2;
+      y+=10;
     }
   }
 }
@@ -26,7 +42,7 @@ class Powerup {
   }
 }
 class Proyectil { 
-  float x, y, t;
+  float x, y;
   boolean col, fuera;
   PShape p; //proyectil
   Proyectil (float x, float y, boolean col, PShape p) {
@@ -44,24 +60,24 @@ class Proyectil {
     }
   }
   void retornar() {
-    if (x<=-10) {
-      x =width*2;
+    if (x<=-40) {
+      x =width*2+random(150, 300);
     }
   }
 }
 class Bala extends Proyectil { 
   PShape b;
-  //PImage textura de la bala
-  //circle para la "hitbox" o cuadro de colisión
-  Bala(float x, float y, boolean col, PShape b) {//puedo agregar parámetros extra
-    super(x, y, col, b);                         //cuidado con lo que heredás
+  int radio;
+  Bala(float x, float y, boolean col, PShape b) {
+    super(x, y, col, b);                         
     b = loadShape("bullet.svg");
     this.b = b;
     b.scale(0.1);
-    b.setFill(255);
     b.rotate(4.71);
+    radio = 20;
   }
   void dibujar() {
+    circle(x+6, y-22, radio);
     shape (b, x, y);
     mover();
     retornar();
@@ -80,6 +96,6 @@ class Texto {
     fill(100, 255, random(170, 175));
   }
   void escribir() {
-    text ("SIENDO CARGADO\nEN LA MATRIX", width/2, height/2-40);
+    text ("ENTRANDO\nEN LA MATRIX", width/2, height/2-40);
   }
 }
