@@ -1,67 +1,53 @@
-class Neo {
-  //int para la "hitbox" o cuadro de colisión
-  PShape neo;
-  int x, y, tam;
-  int temp; //temporizador de las gafas
-  boolean powerup; //cuando el pj recoje un powerup
-  //PImage textura del personaje
-  Neo (int x2, int y2) {
-    neo = loadShape("neo.svg");
-    this.x = x2;
-    this.y = y2;
-    tam = 300;
-  }
-  void dibujar () {
-    rect (x, y, tam/4, tam/4);
-    shape(neo, x, y, tam, tam);
-  }
-  void mover(int tecla) {
-    if (tecla==RIGHT) {
-      x+=10;
-    }
-    if (tecla==LEFT) {
-      x-=10;
-    }
-    if (tecla==UP) {
-      y-=10;
-    }
-    if (tecla==DOWN) {
-      y+=10;
+class Powerup {
+  int posx[] = new int[3];
+  int posy[] = new int[3];
+  int duracion, chance;
+  float r; //rotan
+  boolean colision;
+  PShape blue, red;
+  Powerup() {
+    blue = loadShape("blue.svg");
+    red = loadShape ("red.svg");
+    blue.scale(0.2);
+    red.scale(0.2);
+    chance = int (random(3));
+    for (int i=0; i<2; i++) {
+      posy[i]=round (random(80, height-80));
+      posx[i]=round (random(80, width-80));
     }
   }
-}
-class Powerup {  
-  float r; //rotan en vuelo
-  Powerup(float r) {
-    this.r = r;
-  }
-  void powerup () { //que sea una barra que se llena, al presionar "x" tecla se activa
-    //estado de invulnerabilidad, donde cada instancia de Balas
-    //no afecta al pj
-    //if powerup true que "desactive" temporalmente la colisión
+  void dibujar() {    //timer para que aparezcan
+    if (chance==0) {
+      shape(blue, posx[0], posy[0]);
+    }
+    if (chance==1) {
+      shape(red, posx[1], posy[1]);
+    }
   }
 }
 class Proyectil { 
   float x, y;
   boolean col, fuera;
   PShape p; //proyectil
+  float velocidad;
+  float retorno;
   Proyectil (float x, float y, boolean col, PShape p) {
     this.x = x;
     this.y = y;
     this.col = col;
     this.p = p;
-  }
-  void dibujarProyectil() {
-    rect(x, y, 20, 5);
+    velocidad=random(5, 8);
+    retorno=width*2+random(40, 100);  //El proyectil vuelve al inicio
   }
   void mover() {
     if (!fuera) {
-      x -=2; // se mueve el proyectil
+      x -= velocidad;
     }
   }
   void retornar() {
     if (x<=-40) {
-      x =width*2+random(150, 300);
+      x= random(580, retorno);
+      y= random(20, 580);
     }
   }
 }
@@ -70,32 +56,40 @@ class Bala extends Proyectil {
   int radio;
   Bala(float x, float y, boolean col, PShape b) {
     super(x, y, col, b);                         
-    b = loadShape("bullet.svg");
+    b = loadShape("bala.svg");
     this.b = b;
     b.scale(0.1);
-    b.rotate(4.71);
-    radio = 20;
+    radio = 10;
+    ellipseMode(CENTER);
   }
   void dibujar() {
-    circle(x+6, y-22, radio);
+    push();
+    translate(-10, -10);
     shape (b, x, y);
+    pop();
     mover();
     retornar();
   }
 }
-class Texto {
-  PFont fuente;
-  Texto() {
-    fuente = createFont("Miltown_.ttf", 32);
+class Boton {
+  int bx, by, ancho, alto; // ubicacion y tamaño
+  String texto;
+  Boton(int bx, int by, int ancho, int alto) {
+    this.bx = bx;
+    this.by = by;
+    this.ancho = ancho;
+    this.alto = alto;
+    textAlign(CENTER, CENTER);
+    textSize(alto/2);
   }
-  void parametros() {
-    textFont(fuente);
-    textSize(40);
-    textAlign(CENTER);
-    colorMode(HSB);
-    fill(100, 255, random(170, 175));
+  void dibujarBoton( String texto) {
+    this.texto = texto;
+    fill(0, 190, 0);
+    rect(bx, by, ancho, alto-20);
+    fill(0, 190, 40); 
+    text(texto, bx+ancho/2, by+alto/2);
   }
-  void escribir() {
-    text ("ENTRANDO\nEN LA MATRIX", width/2, height/2-40);
+  boolean botonPress(int bx, int by, int ancho, int alto) {
+    return mouseX>bx && mouseX<bx+ancho && mouseY>by && mouseY<by+alto;
   }
 }
