@@ -1,6 +1,5 @@
 // Burgos, Facundo Nazareno. Legajo 91527/0 
-//
-//
+// https://youtu.be/YPQ0sY4ZzPc
 import processing.sound.*;
 SoundFile musica;
 Matrix m;
@@ -16,7 +15,5 @@ void draw () {
 }
 void keyPressed() {
   m.movimiento(keyCode);
-  m.presionar();
+  m.sig();
 }
-//Asignar escenas "inicio, juego, ganaste, perdiste"
-//fondo
